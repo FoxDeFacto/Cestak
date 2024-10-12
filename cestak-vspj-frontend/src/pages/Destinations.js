@@ -8,11 +8,11 @@ const Destinations = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [searchParams, setSearchParams] = useState({
-        'filters[Stat][$eq]': '',  // or [$contains] for partial matches
+        'filters[Stat][$eq]': '',  
         'filters[Od][$gte]': '',
         'filters[Do][$lte]': '',
         'filters[Doprava][$eq]': '',
-        'filters[Nazev][$contains]': ''  // Use $contains for partial matching
+        'filters[Nazev][$contains]': ''
     });
 
     const [inputValues, setInputValues] = useState({
@@ -37,14 +37,13 @@ const Destinations = () => {
         { id: "Slovinsko", name: "Slovinsko" },
         { id: "Spojené arabské emiráty", name: "Spojené arabské emiráty" },
         { id: "Švýcarsko", name: "Švýcarsko" }
-      ];
-      
-      
-      const transportMethods = [
+    ];
+
+    const transportMethods = [
         { id: "Vlakem", name: "Vlakem" },
         { id: "Letecky", name: "Letecky" },
         { id: "Autobusem", name: "Autobusem" }
-      ];
+    ];
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -97,10 +96,10 @@ const Destinations = () => {
     };
 
     const handleSearchSubmit = (e) => {
-        e.preventDefault(); // Prevent default form submission
-        setSearchParams(inputValues); // Update searchParams with current input values
-        setCurrentPage(1); // Reset to the first page
-        fetchZajezdy(); // Fetch results based on new searchParams
+        e.preventDefault(); 
+        setSearchParams(inputValues); 
+        setCurrentPage(1); 
+        fetchZajezdy(); 
     };
 
     return (
@@ -154,16 +153,15 @@ const Destinations = () => {
                     className="p-2 m-1 rounded-md border-2 border-gray-300 bg-white text-gray-700"
                 />
                 <button 
-                    type="submit" // Prevents default form submission
+                    type="submit"
                     className="bg-red-600 hover:bg-red-700 text-white p-2 m-1 rounded-md"
                 >
                     Hledat
                 </button>
             </form>
 
-
-            {/* Zajezdy Grid */}
-            {zajezdy === null ? (
+             {/* Zajezdy Grid */}
+             {zajezdy.length === 0 ? (
                 <p>{console.log("Načítání...")}</p>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -188,19 +186,17 @@ const Destinations = () => {
             )}
 
             {/* Pagination */}
-            {zajezdy && zajezdy.length > 0 && (
-                <div className="flex justify-center space-x-2">
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                        <button
-                            key={page}
-                            onClick={() => setCurrentPage(page)}
-                            className={`px-3 py-1 rounded ${currentPage === page ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-700'}`}
-                        >
-                            {page}
-                        </button>
-                    ))}
-                </div>
-            )}
+            <div className="flex justify-center mt-8">
+                {Array.from({ length: totalPages }, (_, index) => (
+                    <button 
+                        key={index + 1} 
+                        onClick={() => setCurrentPage(index + 1)} 
+                        className={`px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+                    >
+                        {index + 1}
+                    </button>
+                ))}
+            </div>
         </div>
     );
 };
