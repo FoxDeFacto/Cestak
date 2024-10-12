@@ -1,0 +1,104 @@
+{
+  "kind": "collectionType",
+  "collectionName": "zajezds",
+  "info": {
+    "singularName": "zajezd",
+    "pluralName": "zajezds",
+    "displayName": "Zajezd",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Nazev": {
+      "type": "string",
+      "required": true
+    },
+    "DodatekNazvu": {
+      "type": "string"
+    },
+    "Cena": {
+      "type": "integer",
+      "required": true
+    },
+    "Od": {
+      "type": "date",
+      "required": true
+    },
+    "Do": {
+      "type": "date",
+      "required": true
+    },
+    "Strava": {
+      "type": "enumeration",
+      "enum": [
+        "Plná penze",
+        "Polopenze",
+        "Bez stravy"
+      ],
+      "required": true
+    },
+    "Program": {
+      "type": "richtext",
+      "required": true
+    },
+    "Tipy": {
+      "displayName": "Tip",
+      "type": "component",
+      "repeatable": true,
+      "component": "tip.tip"
+    },
+    "Poznamky": {
+      "type": "richtext"
+    },
+    "Obrazky": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "Detail": {
+      "displayName": "ProgramDetaily",
+      "type": "component",
+      "repeatable": true,
+      "component": "detail.program-detaily"
+    },
+    "InformaceDopravy": {
+      "type": "string"
+    },
+    "Stat": {
+      "type": "enumeration",
+      "enum": [
+        "Česko",
+        "Bulharsko",
+        "Egypt",
+        "Francie",
+        "Indie",
+        "Madeira",
+        "Maďarsko",
+        "Nizozemsko",
+        "Německo",
+        "Rakousko",
+        "Rumunsko",
+        "Slovinsko",
+        "Spojené arabské emiráty",
+        "Švýcarsko"
+      ],
+      "required": true
+    },
+    "Doprava": {
+      "type": "enumeration",
+      "enum": [
+        "Letecky",
+        "Vlakem",
+        "Autobusem"
+      ],
+      "required": true
+    }
+  }
+}

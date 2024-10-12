@@ -1,0 +1,51 @@
+{
+  "kind": "collectionType",
+  "collectionName": "poptavkas",
+  "info": {
+    "singularName": "poptavka",
+    "pluralName": "poptavkas",
+    "displayName": "Poptavka",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "PocetOsob": {
+      "type": "integer",
+      "required": true
+    },
+    "CeleJmeno": {
+      "type": "string",
+      "required": true
+    },
+    "Bydliste": {
+      "type": "string",
+      "required": true
+    },
+    "Telefon": {
+      "type": "biginteger",
+      "required": true
+    },
+    "Email": {
+      "type": "email"
+    },
+    "DatumNarozeni": {
+      "type": "date",
+      "required": true
+    },
+    "Poznamka": {
+      "type": "string"
+    },
+    "Pojisteni": {
+      "type": "boolean",
+      "default": false
+    },
+    "Zajezd": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::zajezd.zajezd"
+    }
+  }
+}

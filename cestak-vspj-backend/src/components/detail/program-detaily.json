@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_detail_program_detailies",
+  "info": {
+    "displayName": "ProgramDetaily"
+  },
+  "options": {},
+  "attributes": {
+    "Detaily": {
+      "type": "richtext"
+    }
+  }
+}

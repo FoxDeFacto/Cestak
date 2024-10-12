@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_tip_tips",
+  "info": {
+    "displayName": "Tip"
+  },
+  "options": {},
+  "attributes": {
+    "Nazev": {
+      "type": "string",
+      "required": true
+    },
+    "Popis": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

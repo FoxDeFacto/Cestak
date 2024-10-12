@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "zprava_od_uzivateles",
+  "info": {
+    "singularName": "zprava-od-uzivatele",
+    "pluralName": "zprava-od-uzivateles",
+    "displayName": "ZpravaOdUzivatele"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "CeleJmeno": {
+      "type": "string",
+      "required": true
+    },
+    "Email": {
+      "type": "email",
+      "required": true
+    },
+    "Telefon": {
+      "required": true,
+      "type": "biginteger"
+    },
+    "Predmet": {
+      "type": "string",
+      "required": true
+    },
+    "Zprava": {
+      "type": "text",
+      "required": true
+    }
+  }
+}

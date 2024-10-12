@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "uvodni_obrazkies",
+  "info": {
+    "singularName": "uvodni-obrazky",
+    "pluralName": "uvodni-obrazkies",
+    "displayName": "UvodniObrazky"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Obrazky": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": true,
+      "required": true
+    }
+  }
+}
