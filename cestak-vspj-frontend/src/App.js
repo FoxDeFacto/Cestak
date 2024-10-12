@@ -6,6 +6,7 @@ import Homepage from './pages/Homepage';
 import Destinations from './pages/Destinations';
 import DestinationDetail from './pages/DestinationDetail';
 import About from './pages/About';
+import Guides from './pages/Guides';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Homepage />} />
               <Route path="/o-nas" element={<About />} />
+              <Route path="/pruvodci" element={<Guides />} />
               <Route path="/zajezdy" element={<Destinations/>} />
               <Route path="/zajezdy/:id" element={<DestinationDetail/>} />
             </Routes>

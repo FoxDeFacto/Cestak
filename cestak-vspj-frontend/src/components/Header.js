@@ -13,7 +13,7 @@ function Header() {
     <header className="bg-primary text-primary-foreground py-4 px-6 shadow">
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="text-xl font-bold" prefetch={false}>
-          Studentské projekty
+          Test cesťák
         </Link>
         
         <nav className={`md:flex md:space-x-4 ${isMenuOpen ? 'block' : 'hidden'} md:block`}>
@@ -25,6 +25,9 @@ function Header() {
           </Link>
           <Link to="/o-nas" className="block md:inline-block mt-4 md:mt-0 mr-4 md:mr-0 hover:text-accent" prefetch={false}>
             O nás
+          </Link>
+          <Link to="/pruvodci" className="block md:inline-block mt-4 md:mt-0 mr-4 md:mr-0 hover:text-accent" prefetch={false}>
+            Průvodci
           </Link>
         </nav>
         <button 

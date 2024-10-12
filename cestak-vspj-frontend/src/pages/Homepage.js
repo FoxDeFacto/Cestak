@@ -8,6 +8,8 @@ const Homepage = () => {
     const [zajezdy, setZajezdy] = useState([]);
     const [images, setImages] = useState([]);
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     const [searchParams, setSearchParams] = useState({
@@ -46,6 +48,8 @@ const Homepage = () => {
             const response = await fetch(`${config.API}/api/zajezds?populate[0]=Obrazky`);
             const data = await response.json();
             setZajezdy(data.data);
+            setLoading(false);
+            setError(false);
         };
 
         fetchZajezdy();
@@ -85,6 +89,9 @@ const Homepage = () => {
         }, 5000);
         return () => clearInterval(timer);
     }, [images]);
+
+    if (loading) return <div>{console.log('Loading...')}</div>;
+    if (error) return <div>Error: {error.message}</div>;
 
     return (
         <div className="flex flex-col bg-gray-100">
@@ -250,41 +257,50 @@ const Homepage = () => {
                 </div>
             </main>
 
-            <div className="container mx-auto px-4 py-8">
-
+            <section className="container mx-auto px-4 py-8">
                 {/* Informační sekce */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="bg-white shadow-md rounded-lg p-6">
-                    <div className="flex items-center mb-2">
+
+                    <Link to="/o-nas">
+                    <div className="bg-white shadow-md rounded-lg p-6 transition-shadow duration-300 ease-in-out hover:shadow-[0_0_5px_3px_rgba(169,169,169,0.5)]">
+                        <div className="flex items-center mb-2">
                         <span role="img" aria-label="info" className="text-2xl">
-                        ℹ️
+                            ℹ️
                         </span>
                         <h3 className="text-lg font-semibold ml-2">O nás</h3>
+                        </div>
+                        <p>Jsme přední poskytovatel cestovních služeb s dlouholetou tradicí a spokojenými zákazníky po celé Evropě.</p>
                     </div>
-                    <p>Jsme přední poskytovatel cestovních služeb s dlouholetou tradicí a spokojenými zákazníky po celé Evropě.</p>
-                    </div>
+                    </Link>
 
-                    <div className="bg-white shadow-md rounded-lg p-6">
-                    <div className="flex items-center mb-2">
+                    <Link to="/destinace">
+                    <div className="bg-white shadow-md rounded-lg p-6 transition-shadow duration-300 ease-in-out hover:shadow-[0_0_5px_3px_rgba(169,169,169,0.5)]">
+                        <div className="flex items-center mb-2">
                         <span role="img" aria-label="map" className="text-2xl">
-                        🗺️
+                            🗺️
                         </span>
                         <h3 className="text-lg font-semibold ml-2">Naše destinace</h3>
+                        </div>
+                        <p>Nabízíme cesty do více než 100 destinací napříč Evropou. Od historických měst po nádherné přírodní scenérie.</p>
                     </div>
-                    <p>Nabízíme cesty do více než 100 destinací napříč Evropou. Od historických měst po nádherné přírodní scenérie.</p>
-                    </div>
+                    </Link>
 
-                    <div className="bg-white shadow-md rounded-lg p-6">
-                    <div className="flex items-center mb-2">
+                    <Link to="/bezpecnost">
+                    <div className="bg-white shadow-md rounded-lg p-6 transition-shadow duration-300 ease-in-out hover:shadow-[0_0_5px_3px_rgba(169,169,169,0.5)]">
+                        <div className="flex items-center mb-2">
                         <span role="img" aria-label="shield" className="text-2xl">
-                        🛡️
+                            🛡️
                         </span>
                         <h3 className="text-lg font-semibold ml-2">Bezpečnost</h3>
+                        </div>
+                        <p>Vaše bezpečnost je naší prioritou. Všechny naše cesty jsou plně pojištěny a splňují nejvyšší bezpečnostní standardy.</p>
                     </div>
-                    <p>Vaše bezpečnost je naší prioritou. Všechny naše cesty jsou plně pojištěny a splňují nejvyšší bezpečnostní standardy.</p>
-                    </div>
+                    </Link>
+
                 </div>
-            </div>
+            </section>
+
+
         </div>
     );
 };
