@@ -485,6 +485,69 @@ export interface PluginUsersPermissionsUser
   };
 }
 
+export interface ApiDokumentyDokumenty extends Struct.CollectionTypeSchema {
+  collectionName: 'dokumenties';
+  info: {
+    singularName: 'dokumenty';
+    pluralName: 'dokumenties';
+    displayName: 'Dokumenty';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Nazev: Schema.Attribute.String & Schema.Attribute.Required;
+    Dokumenty: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    > &
+      Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::dokumenty.dokumenty'
+    >;
+  };
+}
+
+export interface ApiNasTymNasTym extends Struct.CollectionTypeSchema {
+  collectionName: 'nas_tyms';
+  info: {
+    singularName: 'nas-tym';
+    pluralName: 'nas-tyms';
+    displayName: 'NasTym';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    CeleJmeno: Schema.Attribute.String & Schema.Attribute.Required;
+    Pozice: Schema.Attribute.String & Schema.Attribute.Required;
+    Obrazek: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::nas-tym.nas-tym'
+    >;
+  };
+}
+
 export interface ApiPoptavkaPoptavka extends Struct.CollectionTypeSchema {
   collectionName: 'poptavkas';
   info: {
@@ -519,6 +582,39 @@ export interface ApiPoptavkaPoptavka extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::poptavka.poptavka'
+    >;
+  };
+}
+
+export interface ApiPrudovciPrudovci extends Struct.CollectionTypeSchema {
+  collectionName: 'prudovcis';
+  info: {
+    singularName: 'prudovci';
+    pluralName: 'prudovcis';
+    displayName: 'Pruvodci';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    CeleJmeno: Schema.Attribute.String & Schema.Attribute.Required;
+    Pozice: Schema.Attribute.String & Schema.Attribute.Required;
+    Zkusenosti: Schema.Attribute.String & Schema.Attribute.Required;
+    DodatecneInformace: Schema.Attribute.String;
+    Obrazek: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
+    Certifikaty: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::prudovci.prudovci'
     >;
   };
 }
@@ -1022,7 +1118,10 @@ declare module '@strapi/strapi' {
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'api::dokumenty.dokumenty': ApiDokumentyDokumenty;
+      'api::nas-tym.nas-tym': ApiNasTymNasTym;
       'api::poptavka.poptavka': ApiPoptavkaPoptavka;
+      'api::prudovci.prudovci': ApiPrudovciPrudovci;
       'api::uvodni-obrazky.uvodni-obrazky': ApiUvodniObrazkyUvodniObrazky;
       'api::zajezd.zajezd': ApiZajezdZajezd;
       'api::zprava-od-uzivatele.zprava-od-uzivatele': ApiZpravaOdUzivateleZpravaOdUzivatele;

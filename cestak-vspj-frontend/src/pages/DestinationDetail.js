@@ -15,7 +15,7 @@ const getTransportIcon = (transport) => {
         case 'Autobusem':
             return <FaBus className="text-red-500" />;
         default:
-            return null; // or a default icon
+            return <FaBus className="text-red-500" />;
     }
 };
 

@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "nas_tyms",
+  "info": {
+    "singularName": "nas-tym",
+    "pluralName": "nas-tyms",
+    "displayName": "NasTym",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "CeleJmeno": {
+      "type": "string",
+      "required": true
+    },
+    "Pozice": {
+      "type": "string",
+      "required": true
+    },
+    "Obrazek": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false,
+      "required": true
+    }
+  }
+}

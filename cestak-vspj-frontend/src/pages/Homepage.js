@@ -88,7 +88,7 @@ const Homepage = () => {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        const fetchedImages = data.data.length > 0 ? data.data[0].Obrazky : [];
+        const fetchedImages = data.data.length > 0 ? data.data[0].Obrazky.slice(0, 4) : [ config.defaultImage,config.defaultImage,config.defaultImage ];
         setImages(fetchedImages);
         setLoadingImages(false);
       } catch (err) {
@@ -115,13 +115,13 @@ const Homepage = () => {
         <div className="flex flex-col bg-gray-100">
             {/* Header */}
             <div className="bg-gradient-to-r from-red-600 to-red-800 text-white pb-4">
-                <div className="relative w-full h-80 overflow-hidden"> {/* Increased height */}
+            <div className="relative w-full h-96 overflow-hidden"> {/* Increased height */}
                     {images.map((img, index) => (
                         <img
-                            key={img.id} // Ensure img.id is unique
-                            src={`${config.API}${img.url}`} // Build the full URL
+                            key={img.id}
+                            src={`${config.API}${img.url}`}
                             alt={`Slide ${index + 1}`}
-                            className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-500 ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
+                            className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-700 ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
                         />
                     ))}
 
@@ -129,10 +129,11 @@ const Homepage = () => {
                     <div className="absolute inset-0 flex items-center justify-center">
                         <div className="bg-red-600 bg-opacity-70 p-4 rounded-lg text-center">
                             <h1 className="text-3xl font-bold">Vítejte v Теstovací Cestovní kanceláři</h1>
-                            <h2 className="text-2xl">Vysoké školy polytechnické Jihlava</h2>
+                            <h2 className="text-2xl">Vysoké školy</h2>
                         </div>
                     </div>
 
+                    {/* Navigation Buttons */}
                     <button 
                         className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-full p-2"
                         onClick={() => setCurrentSlide((currentSlide - 1 + images.length) % images.length)}
@@ -145,12 +146,23 @@ const Homepage = () => {
                     >
                         <div className="text-red-600">▶</div>
                     </button>
+
+                    {/* Carousel Indicators */}
+                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                        {images.map((_, index) => (
+                            <div
+                                key={index}
+                                onClick={() => setCurrentSlide(index)} // Click to navigate to the specific slide
+                                className={`h-3 w-3 rounded-full cursor-pointer ${currentSlide === index ? 'bg-white' : 'bg-gray-400'}`}
+                            ></div>
+                        ))}
+                    </div>
                 </div>
 
                 {/* Enhanced Search Bar */}
-                <form onSubmit={handleSearchSubmit} className="flex flex-wrap justify-center mt-4 px-4">
-                    <select 
-                        name="filters[Stat][$eq]" 
+                <form onSubmit={handleSearchSubmit} className="flex flex-wrap items-center justify-center mt-4 px-4">
+                    <select
+                        name="filters[Stat][$eq]"
                         value={searchParams['filters[Stat][$eq]']}
                         onChange={handleSearchChange}
                         className="p-2 m-1 rounded-md border-2 border-gray-300 bg-white text-gray-700"
@@ -160,21 +172,32 @@ const Homepage = () => {
                             <option key={country.id} value={country.id}>{country.name}</option>
                         ))}
                     </select>
-                    <input
-                        type="date"
-                        name="filters[Od][$gte]"
-                        value={searchParams['filters[Od][$gte]']}
-                        onChange={handleSearchChange}
-                        className="p-2 m-1 rounded-md border-2 border-gray-300 bg-white text-gray-700"
-                    />
-                    <input
-                        type="date"
-                        name="filters[Do][$lte]"
-                        value={searchParams['filters[Do][$lte]']}
-                        onChange={handleSearchChange}
-                        className="p-2 m-1 rounded-md border-2 border-gray-300 bg-white text-gray-700"
-                    />
-                    <select 
+
+                    <div className="flex items-center m-1">
+                        <label htmlFor="dateFrom" className="mr-2 text-base font-semibold text-white">Od:</label>
+                        <input
+                            id="dateFrom"
+                            type="date"
+                            name="filters[Od][$gte]"
+                            value={searchParams['filters[Od][$gte]']}
+                            onChange={handleSearchChange}
+                            className="p-2 rounded-md border-2 border-gray-300 bg-white text-gray-700"
+                        />
+                    </div>
+
+                    <div className="flex items-center m-1">
+                        <label htmlFor="dateTo" className="mr-2 text-base font-semibold text-white">Do:</label>
+                        <input
+                            id="dateTo"
+                            type="date"
+                            name="filters[Do][$lte]"
+                            value={searchParams['filters[Do][$lte]']}
+                            onChange={handleSearchChange}
+                            className="p-2 rounded-md border-2 border-gray-300 bg-white text-gray-700"
+                        />
+                    </div>
+
+                    <select
                         name="filters[Doprava][$eq]"
                         value={searchParams['filters[Doprava][$eq]']}
                         onChange={handleSearchChange}
@@ -185,6 +208,7 @@ const Homepage = () => {
                             <option key={mode.id} value={mode.id}>{mode.name}</option>
                         ))}
                     </select>
+
                     <input
                         type="text"
                         name="filters[Nazev][$contains]"
@@ -193,10 +217,12 @@ const Homepage = () => {
                         placeholder="Název zájezdu"
                         className="p-2 m-1 rounded-md border-2 border-gray-300 bg-white text-gray-700"
                     />
+
                     <button type="submit" className="bg-red-600 hover:bg-red-700 text-white p-2 m-1 rounded-md">
                         Hledat
                     </button>
                 </form>
+
             </div>
 
             {/* Main Content */}
@@ -227,9 +253,9 @@ const Homepage = () => {
                     
                     <div className="flex flex-col md:flex-row featurette my-8">
                         <div className="md:w-7/12">
-                            <h2 className="text-3xl font-normal leading-tight">Prezentace společnosti Rail Europe</h2>
+                            <h2 className="text-3xl font-normal leading-tight">Prezentace společnosti Робота</h2>
                             <p className="mt-2 text-lg">
-                                Dne 18. 9. 2024 se naše Cestovní kancelář účastnila prezentace společnosti Rail Europe. 
+                                Dne 29. 2. 2024 se naše Cestovní kancelář účastnila prezentace společnosti Робота. 
                                 Jedná se o společnost, která má ve svém portfoliu více než 70 dopravcních společností z Evropy. 
                                 Aktuálně sepisujeme smlouvy o spolupráci a vy se můžete těšit na zajímavé nabídky 
                                 zahrnující mimo jiné i vlakovou dopravu.
@@ -262,10 +288,10 @@ const Homepage = () => {
 
                         {/* Text Section */}
                         <div className="md:w-5/12 order-1 md:order-2 flex flex-col justify-center text-center md:text-left">
-                            <h2 className="text-3xl font-normal leading-tight">Workshop Mauricius</h2>
+                            <h2 className="text-3xl font-normal leading-tight">Workshop Exotika</h2>
                             <p className="mt-2 text-lg">
-                                Dne 13. 9. 2024 proběhl v Praze veletrh se zástupci lokálních partnerů, hotelů a cestovních 
-                                kanceláří z ostrova Mauricius. Za celý den jsme navázali řadu kontaktů, díky nimž 
+                                Dne 30. 2. 2024 proběhl v Praze veletrh se zástupci lokálních partnerů, hotelů a cestovních 
+                                kanceláří z Exotiky. Za celý den jsme navázali řadu kontaktů, díky nimž 
                                 vám budeme moci nabídnout výhodnější ubytování i dovolenou v této krásné a stále 
                                 oblíbenější destinaci.
                             </p>

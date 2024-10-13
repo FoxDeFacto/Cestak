@@ -1,3 +1,4 @@
 {
-    "API" : "http://localhost:1337"
+    "API" : "http://localhost:1337",
+    "defaultImage" : "https://img.freepik.com/free-vector/flat-design-no-photo-sign_23-2149259325.jpg"
 }

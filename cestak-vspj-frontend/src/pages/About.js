@@ -7,15 +7,29 @@ import config from '../config.json';
   const About = () => {
 
     const [images, setImages] = useState([]);
+    const [teamMembers, setTeaMembers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadingImages, setLoadingImages] = useState(true);
     const [error, setError] = useState(null);
 
-    const teamMembers = [
-      { name: "Alex Johnson", role: "Founder & CEO", image: "/placeholder.svg" },
-      { name: "Sarah Lee", role: "Head of Operations", image: "/placeholder.svg" },
-      { name: "Mike Chen", role: "Lead Travel Consultant", image: "/placeholder.svg" },
-      { name: "Emma Rodriguez", role: "Customer Experience Manager", image: "/placeholder.svg" },
-    ];
+
+      useEffect(() => {
+        const fetchTeamMembers = async () => {
+          try {
+            const response = await fetch(`${config.API}/api/nas-tyms?populate=*`);
+            const data = await response.json();
+            setTeaMembers(data.data);
+            setLoading(false);
+          } catch (error) {
+              console.error('Error fetching images:', error);
+              setError(true);
+          } finally {
+              setLoading(false); // Set loading to false after fetch
+          }
+          };
+
+        fetchTeamMembers();
+      },[])
 
        // Fetch images
        useEffect(() => {
@@ -29,32 +43,45 @@ import config from '../config.json';
             console.error('Error fetching images:', error);
             setError(true);
         } finally {
-            setLoading(false); // Set loading to false after fetch
+            setLoadingImages(false); // Set loading to false after fetch
         }
         };
 
         fetchImages();
     }, []);
 
-  if (loading) return <div>{console.log('Loading...')}</div>; 
+  if (loading || loadingImages) return <div>{console.log('Loading...')}</div>; 
   if (error) return <div>Error: {error.message}</div>;
 
     return (
+      <div>
+          {/* Header */}
+          <div className="bg-gradient-to-r from-red-600 to-red-800 text-white py-2">
+          <div className="relative w-full h-96 overflow-hidden">
+              <img
+               src={images && images.length > 2 && images[2].url ? `${config.API}${images[2].url}` : config.defaultImage}
+              alt="Mountain landscape" // Corrected the attribute
+              className="absolute inset-0 w-full h-full object-cover"
+              />
+              {/* Overlay Text */}
+              <div className="absolute inset-0 flex items-center justify-center">
+              <div className="bg-red-600 bg-opacity-70 p-4 rounded-lg text-center">
+                  <h1 className="text-3xl font-bold">Cestování. Dovolená. Dobrodružství.</h1>
+                  <p className="text-xl">Test cesťák ze 2 dny hotový</p>
+              </div>
+              </div>
+          </div>
+        </div>
       <div className="container mx-auto px-4 py-8 space-y-12">
-        <header className="text-center space-y-4">
-          <h1 className="text-4xl font-bold tracking-tight">Cestování. Dovolená. Dobrodružství.</h1>
-          <p className="text-xl text-gray-600">Test cesťák ze 2 dny hotový</p>
-        </header>
-  
         <section className="grid md:grid-cols-2 gap-8 items-center">
           <div className="space-y-4">
             <h2 className="text-3xl font-semibold">O nás</h2>
             <p className="text-gray-600">
-              Vysoká škola polytechnická Jihlava je od 7. 3. 2008 vlastníkem koncese na provozování cestovní kanceláře.
-              Kancelář při VŠPJ byla zřízena za účelem vytvoření prostředí pro získání praktických zkušeností našich studentů v oboru a organizace zájezdů studentů oboru Cestovní ruch.
+              Vysoká škola je od 7. 3. 2008 vlastníkem koncese na provozování cestovní kanceláře.
+              Kancelář byla zřízena za účelem vytvoření prostředí pro získání praktických zkušeností našich studentů v oboru a organizace zájezdů studentů oboru Cestovní ruch.
             </p>
             <p className="text-gray-600">
-              Kromě vícedenních pobytů nabízí CK VŠPJ i jednodenní poznávací zájezdy po přírodních i kulturních památkách ČR a okolních států. 
+              Kromě vícedenních pobytů nabízí CK i jednodenní poznávací zájezdy po přírodních i kulturních památkách ČR a okolních států. 
               Takto naši klienti navštívili např. památky UNESCO na Vysočině, v Jižních Čechách a Olomouci. 
               Nelze opomenout ani návštěvy Vídně a Drážďan.
             </p>
@@ -99,21 +126,23 @@ import config from '../config.json';
           </div>
         </section>
 
-  
         <section>
           <h2 className="text-3xl font-semibold mb-6 text-center">Náš tým</h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {teamMembers.map((member) => (
-              <div key={member.name} className="border rounded-lg text-center p-6 space-y-2">
+          <div className="flex flex-wrap justify-evenly">
+            {teamMembers.map((member, index) => (
+              <div
+                key={member.id}
+                className={`text-center p-6 space-y-2 w-1/3 ${index % 3 === 0 ? 'clear-left' : ''}`}
+              >
                 <img
-                  src={`${config.API}${images[0].url}`}
-                  alt={member.name}
-                  width={150}
-                  height={150}
+                  src={`${config.API}${member.Obrazek.url}`}
+                  alt={member.Nazev}
+                  width={250}
+                  height={350}
                   className="rounded-full mx-auto"
                 />
-                <h3 className="font-semibold">{member.name}</h3>
-                <p className="text-sm text-gray-600">{member.role}</p>
+                <h3 className="font-semibold">{member.CeleJmeno}</h3>
+                <p className="text-sm text-gray-600">{member.Pozice}</p>
               </div>
             ))}
           </div>
@@ -129,6 +158,7 @@ import config from '../config.json';
           </Link>
           </button>
         </section>
+      </div>
       </div>
     );
   }

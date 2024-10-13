@@ -150,6 +150,8 @@ const Destinations = () => {
                         <option key={country.id} value={country.id}>{country.name}</option>
                     ))}
                 </select>
+                <div className="flex items-center m-1"> 
+                <label htmlFor="dateTo" className="mr-2 text-base font-semibold text-black">Do:</label>
                 <input
                     type="date"
                     name="filters[Od][$gte]"
@@ -157,6 +159,9 @@ const Destinations = () => {
                     onChange={handleInputChange}
                     className="p-2 m-1 rounded-md border-2 border-gray-300 bg-white text-gray-700"
                 />
+                </div>
+                <div className="flex items-center m-1">
+                 <label htmlFor="dateTo" className="mr-2 text-base font-semibold text-black">Do:</label>
                 <input
                     type="date"
                     name="filters[Do][$lte]"
@@ -164,6 +169,7 @@ const Destinations = () => {
                     onChange={handleInputChange}
                     className="p-2 m-1 rounded-md border-2 border-gray-300 bg-white text-gray-700"
                 />
+                </div>
                 <select 
                     name="filters[Doprava][$eq]"
                     value={inputValues['filters[Doprava][$eq]']}

@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "dokumenties",
+  "info": {
+    "singularName": "dokumenty",
+    "pluralName": "dokumenties",
+    "displayName": "Dokumenty",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Nazev": {
+      "type": "string",
+      "required": true
+    },
+    "Dokumenty": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  }
+}
