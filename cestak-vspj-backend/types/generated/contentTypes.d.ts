@@ -506,6 +506,8 @@ export interface ApiPoptavkaPoptavka extends Struct.CollectionTypeSchema {
     Poznamka: Schema.Attribute.String;
     Pojisteni: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     Zajezd: Schema.Attribute.Relation<'oneToOne', 'api::zajezd.zajezd'>;
+    Termin: Schema.Attribute.Component<'terminy.terminy', true> &
+      Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
@@ -598,6 +600,8 @@ export interface ApiZajezdZajezd extends Struct.CollectionTypeSchema {
       Schema.Attribute.Required;
     Doprava: Schema.Attribute.Enumeration<['Letecky', 'Vlakem', 'Autobusem']> &
       Schema.Attribute.Required;
+    Termin: Schema.Attribute.Component<'terminy.terminy', true> &
+      Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
@@ -617,6 +621,7 @@ export interface ApiZpravaOdUzivateleZpravaOdUzivatele
     singularName: 'zprava-od-uzivatele';
     pluralName: 'zprava-od-uzivateles';
     displayName: 'ZpravaOdUzivatele';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -624,9 +629,9 @@ export interface ApiZpravaOdUzivateleZpravaOdUzivatele
   attributes: {
     CeleJmeno: Schema.Attribute.String & Schema.Attribute.Required;
     Email: Schema.Attribute.Email & Schema.Attribute.Required;
-    Telefon: Schema.Attribute.BigInteger & Schema.Attribute.Required;
     Predmet: Schema.Attribute.String & Schema.Attribute.Required;
     Zprava: Schema.Attribute.Text & Schema.Attribute.Required;
+    Telefon: Schema.Attribute.String & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;

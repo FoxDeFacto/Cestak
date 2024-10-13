@@ -11,6 +11,17 @@ export interface TipTip extends Struct.ComponentSchema {
   };
 }
 
+export interface TerminyTerminy extends Struct.ComponentSchema {
+  collectionName: 'components_terminy_terminies';
+  info: {
+    displayName: 'Term\u00EDny';
+  };
+  attributes: {
+    Od: Schema.Attribute.Date & Schema.Attribute.Required;
+    Do: Schema.Attribute.Date & Schema.Attribute.Required;
+  };
+}
+
 export interface ObrazekObrazky extends Struct.ComponentSchema {
   collectionName: 'components_obrazek_obrazkies';
   info: {
@@ -33,6 +44,7 @@ declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
       'tip.tip': TipTip;
+      'terminy.terminy': TerminyTerminy;
       'obrazek.obrazky': ObrazekObrazky;
       'detail.program-detaily': DetailProgramDetaily;
     }

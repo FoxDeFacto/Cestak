@@ -31,39 +31,27 @@ const Avatar = ({ src, alt, fallback }) => (
 
 const guides = [
   {
-    name: "Žaneta Spilková",
-    title: "Studentka VŠP",
-    description: "Průvodcovská činnost v rámci poznávací praxe (Úvod do průvodcovské činnosti), průvodce výletů ČK VŠP, Průvodcování školních zájezdů - Evropa",
+    name: "Jméno Příjmenení",
+    title: "Pozice",
+    description: "Popis činností",
     image: "/placeholder.svg?height=100&width=100"
   },
   {
-    name: "Magdaléna Malcharková",
-    title: "Studentka VŠP",
-    description: "Průvodcovská činnost v rámci poznávací praxe (Úvod do průvodcovské činnosti), průvodce výletů ČK VŠP",
+    name: "Jméno Příjmenení",
+    title: "Pozice",
+    description: "Popis činností",
     image: "/placeholder.svg?height=100&width=100"
   },
   {
-    name: "Ludmila Svobodová",
-    title: "Studentka VŠP",
-    description: "Specializace na poznávávací klientelu, práce pro školy, Specializace na střední Evropu.",
+    name: "Jméno Příjmenení",
+    title: "Pozice",
+    description: "Popis činností",
     image: "/placeholder.svg?height=100&width=100"
   },
   {
-    name: "Veronika Severová",
-    title: "Studentka VŠP",
-    description: "Průvodcovská činnost v rámci poznávací praxe (Úvod do průvodcovské činnosti), průvodce výletů ČK VŠP, Praxe v dalších cestých CK a CA.",
-    image: "/placeholder.svg?height=100&width=100"
-  },
-  {
-    name: "Jiří Málek",
-    title: "Student VŠP",
-    description: "Průvodcovská činnost v rámci poznávací praxe (Úvod do průvodcovské činnosti), průvodce výletů ČK VŠP, Praxe v dalších zahraničních agenturách pro Prahu a Karlovy Vary.",
-    image: "/placeholder.svg?height=100&width=100"
-  },
-  {
-    name: "Jana Kubečková",
-    title: "Studentka VŠP",
-    description: "Průvodce pro informační centrum v Prostějově, průvodce na Mezinárodním festivalu, průvodce na zámku v Slavkově, průvodce na zámku v Náměšti na Hané, průvodce pro CK Geops",
+    name: "Jméno Příjmenení",
+    title: "Pozice",
+    description: "Popis činností",
     image: "/placeholder.svg?height=100&width=100"
   }
 ];
@@ -74,6 +62,26 @@ const Guides = () => {
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const [countries, setCountries] = useState([]);
+
+    useEffect(() => {
+      const fetchCountries = async () => {
+        try {
+          const response = await fetch(`${config.API}/api/zajezds?filters[Stat][$ne]=null&fields[Stat]=true&sort[Stat]=asc`);
+          const data = await response.json();
+          const fetchedCountries = data.data.length > 0 ? data.data : [];
+          setCountries(fetchedCountries);
+        } catch (error) {
+          console.error('Error fetching countries:',error);
+        } finally {
+          console.log("Success");
+        }
+
+      };
+      fetchCountries();
+
+    },[])
 
    // Fetch images
     useEffect(() => {
@@ -106,7 +114,7 @@ const Guides = () => {
           className="w-full h-48 object-cover rounded-lg"
         />
         <h1 className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-4xl font-bold text-white" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
-          Naši průvodci
+          Naši průvodci {console.log(countries)}
         </h1>
       </div>
       <Card className="mb-8">

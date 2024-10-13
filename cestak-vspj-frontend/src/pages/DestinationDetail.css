@@ -1,0 +1,18 @@
+.modal-overlay {
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+    z-index: 50; /* Higher z-index for modal */
+    position: fixed; /* Fixed to the viewport */
+    top: 0; /* Align to the top */
+    left: 0; /* Align to the left */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+}
+
+.modal-content {
+    max-width: 500px; /* Set a max width for modal */
+    width: 100%; /* Make modal responsive */
+    position: absolute; /* Change to absolute to position relative to overlay */
+    left: 50%; /* Center it horizontally */
+    transform: translateX(-50%); /* Adjust for half its width to center */
+    border-radius: 8px; /* Optional: add some rounded corners */
+}

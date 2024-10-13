@@ -99,6 +99,13 @@
         "Autobusem"
       ],
       "required": true
+    },
+    "Termin": {
+      "displayName": "Termíny",
+      "type": "component",
+      "repeatable": true,
+      "component": "terminy.terminy",
+      "required": true
     }
   }
 }

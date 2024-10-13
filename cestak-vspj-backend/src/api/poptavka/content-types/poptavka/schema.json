@@ -46,6 +46,12 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::zajezd.zajezd"
+    },
+    "Termin": {
+      "type": "component",
+      "repeatable": true,
+      "component": "terminy.terminy",
+      "required": true
     }
   }
 }

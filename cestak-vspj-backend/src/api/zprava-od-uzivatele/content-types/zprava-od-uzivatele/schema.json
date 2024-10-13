@@ -4,7 +4,8 @@
   "info": {
     "singularName": "zprava-od-uzivatele",
     "pluralName": "zprava-od-uzivateles",
-    "displayName": "ZpravaOdUzivatele"
+    "displayName": "ZpravaOdUzivatele",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -19,10 +20,6 @@
       "type": "email",
       "required": true
     },
-    "Telefon": {
-      "required": true,
-      "type": "biginteger"
-    },
     "Predmet": {
       "type": "string",
       "required": true
@@ -30,6 +27,11 @@
     "Zprava": {
       "type": "text",
       "required": true
+    },
+    "Telefon": {
+      "type": "string",
+      "required": true,
+      "regex": "^(\\+?\\d{9}|\\+?\\d{12})$"
     }
   }
 }

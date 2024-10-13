@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_terminy_terminies",
+  "info": {
+    "displayName": "Termíny"
+  },
+  "options": {},
+  "attributes": {
+    "Od": {
+      "type": "date",
+      "required": true
+    },
+    "Do": {
+      "type": "date",
+      "required": true
+    }
+  }
+}

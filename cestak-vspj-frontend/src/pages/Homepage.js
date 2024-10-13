@@ -9,15 +9,16 @@ const Homepage = () => {
     const [images, setImages] = useState([]);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [loadingImages, setLoadingImages] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     const [searchParams, setSearchParams] = useState({
-        'filters[Stat][$eq]': '',  // or [$contains] for partial matches
+        'filters[Stat][$eq]': '',
         'filters[Od][$gte]': '',
         'filters[Do][$lte]': '',
         'filters[Doprava][$eq]': '',
-        'filters[Nazev][$contains]': ''  // Use $contains for partial matching
+        'filters[Nazev][$contains]': ''
     });
 
     const countries = [
@@ -43,17 +44,24 @@ const Homepage = () => {
         { id: "Autobusem", name: "Autobusem" }
       ];
 
-    useEffect(() => {
+      useEffect(() => {
         const fetchZajezdy = async () => {
-            const response = await fetch(`${config.API}/api/zajezds?populate[0]=Obrazky`);
+          try {
+            const response = await fetch(`${config.API}/api/zajezds?populate[0]=Obrazky&sort[0]=Od:asc&pagination[limit]=3`);
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
             const data = await response.json();
             setZajezdy(data.data);
+          } catch (err) {
+            setError(err);
+          } finally {
             setLoading(false);
-            setError(false);
+          }
         };
-
+    
         fetchZajezdy();
-    }, []);
+      }, []);
 
     const handleSearchChange = (e) => {
         const { name, value } = e.target;
@@ -70,17 +78,25 @@ const Homepage = () => {
     };
 
     // Fetch images
-    useEffect(() => {
-        const fetchImages = async () => {
-            const response = await fetch(`${config.API}/api/uvodni-obrazkies?populate=*`);
-            const data = await response.json();
-            // Access the images from the first item in the response
-            const fetchedImages = data.data.length > 0 ? data.data[0].Obrazky : [];
-            setImages(fetchedImages); // Set the images state with the nested image data
-        };
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const response = await fetch(`${config.API}/api/uvodni-obrazkies?populate=*`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        const fetchedImages = data.data.length > 0 ? data.data[0].Obrazky : [];
+        setImages(fetchedImages);
+        setLoadingImages(false);
+      } catch (err) {
+        setError(err);
+        setLoadingImages(false);
+      }
+    };
 
-        fetchImages();
-    }, []);
+    fetchImages();
+  }, []);
 
     // Carousel auto-slide
     useEffect(() => {
@@ -90,13 +106,13 @@ const Homepage = () => {
         return () => clearInterval(timer);
     }, [images]);
 
-    if (loading) return <div>{console.log('Loading...')}</div>;
+    if (loading || loadingImages) return <div>{console.log('Loading...')}</div>;
     if (error) return <div>Error: {error.message}</div>;
 
     return (
         <div className="flex flex-col bg-gray-100">
             {/* Header */}
-            <div className="bg-gradient-to-r from-red-600 to-red-800 text-white pb-6">
+            <div className="bg-gradient-to-r from-red-600 to-red-800 text-white pb-4">
                 <div className="relative w-full h-80 overflow-hidden"> {/* Increased height */}
                     {images.map((img, index) => (
                         <img
@@ -189,8 +205,8 @@ const Homepage = () => {
                     {zajezdy.map((zajezd) => (
                         <div key={zajezd.id} className="bg-white shadow-md rounded-lg p-6">
                             <h3 className="text-xl font-bold text-red-700">{zajezd.Nazev}</h3>
-                            <p className="text-gray-500">{zajezd.Od}</p>
-                            <p className="font-bold mt-2 text-red-600">{zajezd.Cena}</p>
+                            <p className="text-gray-500 font-semibold">{`${zajezd.Od.split('-').reverse().join('.')} - ${zajezd.Do.split('-').reverse().join('.')}`}</p>
+                            <p className="text-lg font-bold mt-2 text-black">{zajezd.Cena} Kč</p>
                             <img
                                 key={zajezd.Obrazky[0].id}
                                 src={`${config.API}${zajezd.Obrazky[0].url}`}
@@ -207,7 +223,6 @@ const Homepage = () => {
                 <div className="container mx-auto my-8 px-4">
                     <hr className="my-4" />
                     
-                    {/* Featurette 1 */}
                     <div className="flex flex-col md:flex-row featurette my-8">
                         <div className="md:w-7/12">
                             <h2 className="text-3xl font-normal leading-tight">Prezentace společnosti Rail Europe</h2>
@@ -221,7 +236,7 @@ const Homepage = () => {
                         <div className="md:w-5/12 flex justify-center">
                             <Link to="/o-nas">
                                 <img
-                                    src="/images/aktualita.jpg"
+                                    src={`${config.API}${images[1].url}`}
                                     alt="Prezentace společnosti Rail Europe"
                                     className="max-h-80 max-w-full shadow-lg rounded-lg"
                                 />
@@ -231,9 +246,20 @@ const Homepage = () => {
 
                     <hr className="my-4" />
 
-                    {/* Featurette 2 */}
                     <div className="flex flex-col md:flex-row featurette my-8">
-                        <div className="md:w-7/12 order-2 md:order-1">
+                        {/* Image Section */}
+                        <div className="md:w-7/12 order-2 md:order-1 flex justify-center">
+                            <Link to="/o-nas" className="block mt-4 md:mt-0 mr-4 md:mr-0 hover:text-accent" prefetch={false}>
+                                <img
+                                    src={`${config.API}${images[2].url}`}
+                                    alt="Workshop Mauricius"
+                                    className="max-h-80 max-w-full shadow-lg rounded-lg"
+                                />
+                            </Link>
+                        </div>
+
+                        {/* Text Section */}
+                        <div className="md:w-5/12 order-1 md:order-2 flex flex-col justify-center text-center md:text-left">
                             <h2 className="text-3xl font-normal leading-tight">Workshop Mauricius</h2>
                             <p className="mt-2 text-lg">
                                 Dne 13. 9. 2024 proběhl v Praze veletrh se zástupci lokálních partnerů, hotelů a cestovních 
@@ -241,16 +267,6 @@ const Homepage = () => {
                                 vám budeme moci nabídnout výhodnější ubytování i dovolenou v této krásné a stále 
                                 oblíbenější destinaci.
                             </p>
-                        </div>
-                        <div className="md:w-5/12 order-1 md:order-2 flex justify-center">
-                        <Link to="/o-nas" className="block md:inline-block mt-4 md:mt-0 mr-4 md:mr-0 hover:text-accent" prefetch={false}>
-                            Přehled
-                                <img
-                                    src="/images/aktualita2.jpg"
-                                    alt="Workshop Mauricius"
-                                    className="max-h-80 max-w-full shadow-lg rounded-lg"
-                                />
-                        </Link>
                         </div>
                     </div>
 

@@ -29,6 +29,9 @@ function Header() {
           <Link to="/pruvodci" className="block md:inline-block mt-4 md:mt-0 mr-4 md:mr-0 hover:text-accent" prefetch={false}>
             Průvodci
           </Link>
+          <Link to="/kontakty" className="block md:inline-block mt-4 md:mt-0 mr-4 md:mr-0 hover:text-accent" prefetch={false}>
+            Kontakty
+          </Link>
         </nav>
         <button 
           className="md:hidden focus:outline-none"

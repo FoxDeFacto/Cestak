@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 import config from '../config.json';
 
 const Destinations = () => {
@@ -22,6 +22,9 @@ const Destinations = () => {
         'filters[Doprava][$eq]': '',
         'filters[Nazev][$contains]': ''
     });
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const countries = [
         { id: "Bulharsko", name: "Bulharsko" },
@@ -60,7 +63,7 @@ const Destinations = () => {
         let queryParams = new URLSearchParams({
             'populate[0]': 'Obrazky',
             'pagination[page]': currentPage.toString(),
-            'pagination[pageSize]': '16'
+            'pagination[pageSize]': '12'
         });
 
         Object.entries(searchParams).forEach(([key, value]) => {
@@ -74,12 +77,19 @@ const Destinations = () => {
 
         try {
             const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
             const data = await response.json();
             setZajezdy(data.data);
             setTotalPages(data.meta.pagination.pageCount);
         } catch (error) {
             console.error('Error fetching zajezdy:', error);
             setZajezdy([]);
+            setError(error); 
+            setLoading(false);
+        } finally {
+            setLoading(false);
         }
     }, [searchParams, currentPage]);
 
@@ -101,6 +111,27 @@ const Destinations = () => {
         setCurrentPage(1); 
         fetchZajezdy(); 
     };
+
+    const handleReset = () => {
+        setInputValues({
+            'filters[Stat][$eq]': '',
+            'filters[Od][$gte]': '',
+            'filters[Do][$lte]': '',
+            'filters[Doprava][$eq]': '',
+            'filters[Nazev][$contains]': ''
+        });
+        setSearchParams({
+            'filters[Stat][$eq]': '',
+            'filters[Od][$gte]': '',
+            'filters[Do][$lte]': '',
+            'filters[Doprava][$eq]': '',
+            'filters[Nazev][$contains]': ''
+        });
+        navigate("/zajezdy");
+    };
+
+    if (loading) return <div>{console.log('Loading...')}</div>;
+    if (error) return <div>Error: {error.message}</div>;
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -158,18 +189,23 @@ const Destinations = () => {
                 >
                     Hledat
                 </button>
+                <button type="button" onClick={handleReset} className='bg-red-700 hover:bg-red-800 text-white p-2 m-1 rounded-md'>Resetovat</button>
             </form>
 
              {/* Zajezdy Grid */}
              {zajezdy.length === 0 ? (
-                <p>{console.log("Načítání...")}</p>
+                <div className="flex justify-center gap-6 mb-8">
+                    <div className="bg-white shadow-md rounded-lg p-6">
+                        <h3 className="text-xl font-bold text-red-700">Nebyly nalezeny žádné záznamy</h3>
+                    </div>
+                </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     {zajezdy.map((zajezd) => (
                         <div key={zajezd.id} className="bg-white shadow-md rounded-lg p-6">
                             <h3 className="text-xl font-bold text-red-700">{zajezd.Nazev}</h3>
-                            <p className="text-gray-500">{zajezd.Od}</p>
-                            <p className="font-bold mt-2 text-red-600">{zajezd.Cena}</p>
+                            <p className="text-gray-500">{`${zajezd.Od.split('-').reverse().join('.')} - ${zajezd.Do.split('-').reverse().join('.')}`}</p>
+                            <p className="font-bold mt-2 text-black">{zajezd.Cena} Kč</p>
                             {zajezd.Obrazky && zajezd.Obrazky[0] && (
                                 <img
                                     src={`${config.API}${zajezd.Obrazky[0].url}`}
@@ -186,17 +222,20 @@ const Destinations = () => {
             )}
 
             {/* Pagination */}
-            <div className="flex justify-center mt-8">
-                {Array.from({ length: totalPages }, (_, index) => (
-                    <button 
-                        key={index + 1} 
-                        onClick={() => setCurrentPage(index + 1)} 
-                        className={`px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-700'}`}
-                    >
-                        {index + 1}
-                    </button>
-                ))}
-            </div>
+            {totalPages > 1 && (
+                <div className="flex justify-center mt-8">
+                    {Array.from({ length: totalPages }, (_, index) => (
+                        <button 
+                            key={index + 1} 
+                            onClick={() => setCurrentPage(index + 1)} 
+                            className={`px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                </div>
+            )}
+
         </div>
     );
 };
