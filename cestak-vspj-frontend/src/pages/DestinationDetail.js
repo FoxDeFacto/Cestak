@@ -90,17 +90,26 @@ const DestinationDetail = () => {
     const handleSubmit = async (e) => { //TODO Opravit tuhle zkurvenou sračku, nesnáším relace ve strapi
         e.preventDefault();  
 
-       // Create a new Termin object without the id
-        const { id, ...selectedTerminWithoutId } = formData.Termin;
-
         const requestBody = {
-            data: [{
-                ...formData,
-                Termin: selectedTerminWithoutId, // Send the Termin object without the id
+            data: {
+                PocetOsob: parseInt(formData.PocetOsob, 10),
+                CeleJmeno: formData.CeleJmeno,
+                Bydliste: formData.Bydliste,
+                Telefon: formData.Telefon,
+                Email: formData.Email,
+                DatumNarozeni: formData.DatumNarozeni,
+                Termin: formData.Termin ? [
+                    {
+                        Od: formData.Termin.Od.replace(/"/g, ''),
+                        Do: formData.Termin.Do.replace(/"/g, '')
+                    }
+                ] : [],
+                Poznamka: formData.Poznamka,
+                Pojisteni: formData.Pojisteni,
                 Zajezd: {
-                    connect: [{ documentId: 'omqtiimt93bggszypbrloeig' }]
-                  },
-            }]
+                    connect: [{ id: zajezd.id }]
+                }
+            }
         };
 
         console.log(requestBody);
@@ -115,7 +124,8 @@ const DestinationDetail = () => {
             });
 
             if (!response.ok) {
-                console.log(response);
+                const errorData = await response.json();
+                console.error('Error response:', errorData);
                 throw new Error('Network response was not ok');
             }
 
@@ -138,6 +148,25 @@ const DestinationDetail = () => {
         } catch (error) {
             console.error('Error submitting form:', error);
         }
+    };
+
+    const openModal = (termin = null) => {
+        setFormData(prevData => ({
+          ...prevData,
+          Termin: termin
+        }));
+        setIsModalOpen(true);
+      };
+
+    const handleTerminChange = (e) => {
+        const selectedTermin = zajezd.Termin.find((termin) => termin.id === parseInt(e.target.value, 10));
+        setFormData(prevData => ({
+            ...prevData,
+            Termin: selectedTermin ? {
+                Od: selectedTermin.Od,
+                Do: selectedTermin.Do
+            } : null
+        }));
     };
 
     if (loading) return <div>{console.log("Načítání...")}</div>;
@@ -226,21 +255,15 @@ const DestinationDetail = () => {
                                 <label className="block text-gray-700">Vyberte termín</label>
                                 <select
                                     name="Termin"
-                                    value={formData.Termin?.id || ""}  // Keep the id for selection purposes
-                                    onChange={(e) => {
-                                        const selectedTermin = zajezd.Termin.find((termin) => termin.id === parseInt(e.target.value, 10)); // Find the selected termin
-                                        setFormData({
-                                            ...formData,
-                                            Termin: selectedTermin ? { ...selectedTermin } : null // Store the full Termin object
-                                        });
-                                    }}
+                                    value={formData.Termin?.id || ""}
+                                    onChange={handleTerminChange}
                                     className="w-full px-4 py-2 border rounded-lg"
                                     required
-                                >
+                                    >
                                     <option value="">Vyberte termín</option>
                                     {zajezd.Termin.map((termin) => (
                                         <option key={termin.id} value={termin.id}>
-                                            {termin.Od.split('-').reverse().join('.')} - {termin.Do.split('-').reverse().join('.')}
+                                        {termin.Od.split('-').reverse().join('.')} - {termin.Do.split('-').reverse().join('.')}
                                         </option>
                                     ))}
                                 </select>
@@ -531,12 +554,12 @@ const DestinationDetail = () => {
                                             <div className="text-sm text-gray-900">{termin.Do.split('-').reverse().join('.')}</div>
                                         </td>
                                         <td className="pr-9 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <button
-                                                className="btn btn-primary bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105"
-                                                onClick={() => setIsModalOpen(true)}
+                                        <button
+                                            className="btn btn-primary bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105"
+                                            onClick={() => openModal(termin)}
                                             >
-                                                Nezávazná poptávka
-                                            </button>
+                                            Nezávazná poptávka
+                                        </button>
                                         </td>
                                     </tr>
                                 ))}
