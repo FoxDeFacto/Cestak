@@ -1,6 +1,7 @@
 // src/pages/Homepage.js
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { FaInfoCircle, FaMapMarkedAlt, FaShieldAlt } from "react-icons/fa";
 import config from '../config.json';
 
 const Homepage = () => {
@@ -22,6 +23,7 @@ const Homepage = () => {
     });
 
     const countries = [
+        { id: "Česko", name: "Česko" },
         { id: "Bulharsko", name: "Bulharsko" },
         { id: "Egypt", name: "Egypt" },
         { id: "Francie", name: "Francie" },
@@ -276,43 +278,35 @@ const Homepage = () => {
             <section className="container mx-auto px-4 py-8">
                 {/* Informační sekce */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
                     <Link to="/o-nas">
                     <div className="bg-white shadow-md rounded-lg p-6 transition-shadow duration-300 ease-in-out hover:shadow-[0_0_5px_3px_rgba(169,169,169,0.5)]">
                         <div className="flex items-center mb-2">
-                        <span role="img" aria-label="info" className="text-2xl">
-                            ℹ️
-                        </span>
+                        <FaInfoCircle className="text-2xl text-red-500" />
                         <h3 className="text-lg font-semibold ml-2">O nás</h3>
                         </div>
                         <p>Jsme přední poskytovatel cestovních služeb s dlouholetou tradicí a spokojenými zákazníky po celé Evropě.</p>
                     </div>
                     </Link>
 
-                    <Link to="/destinace">
+                    <Link to="/kontakty">
                     <div className="bg-white shadow-md rounded-lg p-6 transition-shadow duration-300 ease-in-out hover:shadow-[0_0_5px_3px_rgba(169,169,169,0.5)]">
                         <div className="flex items-center mb-2">
-                        <span role="img" aria-label="map" className="text-2xl">
-                            🗺️
-                        </span>
-                        <h3 className="text-lg font-semibold ml-2">Naše destinace</h3>
+                        <FaMapMarkedAlt className="text-2xl text-red-500" />
+                        <h3 className="text-lg font-semibold ml-2">Kontakty</h3>
                         </div>
                         <p>Nabízíme cesty do více než 100 destinací napříč Evropou. Od historických měst po nádherné přírodní scenérie.</p>
                     </div>
                     </Link>
 
-                    <Link to="/bezpecnost">
+                    <Link to="/pruvodci">
                     <div className="bg-white shadow-md rounded-lg p-6 transition-shadow duration-300 ease-in-out hover:shadow-[0_0_5px_3px_rgba(169,169,169,0.5)]">
                         <div className="flex items-center mb-2">
-                        <span role="img" aria-label="shield" className="text-2xl">
-                            🛡️
-                        </span>
-                        <h3 className="text-lg font-semibold ml-2">Bezpečnost</h3>
+                        <FaShieldAlt className="text-2xl text-red-500" />
+                        <h3 className="text-lg font-semibold ml-2">Průvodci</h3>
                         </div>
                         <p>Vaše bezpečnost je naší prioritou. Všechny naše cesty jsou plně pojištěny a splňují nejvyšší bezpečnostní standardy.</p>
                     </div>
                     </Link>
-
                 </div>
             </section>
 

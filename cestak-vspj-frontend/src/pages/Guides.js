@@ -63,6 +63,8 @@ const Guides = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+
+    /*
     const [countries, setCountries] = useState([]);
 
     useEffect(() => {
@@ -82,6 +84,7 @@ const Guides = () => {
       fetchCountries();
 
     },[])
+    */
 
    // Fetch images
     useEffect(() => {
@@ -114,7 +117,7 @@ const Guides = () => {
           className="w-full h-48 object-cover rounded-lg"
         />
         <h1 className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-4xl font-bold text-white" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
-          Naši průvodci {console.log(countries)}
+          Naši průvodci
         </h1>
       </div>
       <Card className="mb-8">

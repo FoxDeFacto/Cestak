@@ -1,172 +1,136 @@
 // src/pages/About.js
-import React, { useState, useEffect } from 'react';
-
-const Card = ({ children, className }) => (
-    <div className={`bg-white shadow-md rounded-lg overflow-hidden ${className}`}>
-      {children}
-    </div>
-  );
-  
-  const CardHeader = ({ children }) => (
-    <div className="px-6 py-4">{children}</div>
-  );
-  
-  const CardContent = ({ children }) => (
-    <div className="px-6 py-4">{children}</div>
-  );
-  
-  const CardTitle = ({ children }) => (
-    <h2 className="text-xl font-semibold mb-2">{children}</h2>
-  );
-  
-  const Avatar = ({ src, alt, fallback }) => (
-    <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
-      {src ? (
-        <img src={src} alt={alt} className="w-full h-full object-cover" />
-      ) : (
-        <span className="text-xl font-semibold">{fallback}</span>
-      )}
-    </div>
-  );
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { FaThumbsUp, FaInfoCircle, FaHeadset, FaPhone } from "react-icons/fa";
+import config from '../config.json';
 
   const About = () => {
-    const [team, setTeam] = useState([]);
-    const [practicants, setPracticants] = useState([]);
-  
-    useEffect(() => {
-      // Simulate fetching data from an API
-      const fetchTeam = async () => {
-        // Simulated API response for the team
-        const teamData = [
-          {
-            name: "Ondřej Petržela",
-            title: "Vedoucí cestovní kanceláře",
-            description: "Zkušený vedoucí s dlouholetou praxí v cestovním ruchu.",
-            image: "/placeholder.svg?height=100&width=100"
-          },
-          {
-            name: "Mgr. Pavlína Rojík Fulnečková",
-            title: "Zástupce vedoucího",
-            description: "Specialista na marketing a rozvoj cestovní kanceláře.",
-            image: "/placeholder.svg?height=100&width=100"
-          }
-        ];
-        setTeam(teamData);
-      };
-  
-      const fetchPracticants = async () => {
-        // Simulated API response for practicants
-        const practicantsData = [
-          {
-            name: "Žaneta Spilková",
-            title: "Studentka VŠP",
-            description: "Průvodcovská činnost v rámci poznávací praxe, průvodce výletů ČK VŠP, Průvodcování školních zájezdů - Evropa",
-            image: "/placeholder.svg?height=100&width=100"
-          },
-          {
-            name: "Magdaléna Malcharková",
-            title: "Studentka VŠP",
-            description: "Průvodcovská činnost v rámci poznávací praxe, průvodce výletů ČK VŠP",
-            image: "/placeholder.svg?height=100&width=100"
-          },
-          {
-            name: "Ludmila Svobodová",
-            title: "Studentka VŠP",
-            description: "Specializace na poznávávací klientelu, práce pro školy, Specializace na střední Evropu.",
-            image: "/placeholder.svg?height=100&width=100"
-          },
-          {
-            name: "Veronika Severová",
-            title: "Studentka VŠP",
-            description: "Průvodcovská činnost v rámci poznávací praxe, průvodce výletů ČK VŠP, Praxe v dalších cestých CK a CA.",
-            image: "/placeholder.svg?height=100&width=100"
-          }
-        ];
-        setPracticants(practicantsData);
-      };
-  
-      fetchTeam();
-      fetchPracticants();
+
+    const [images, setImages] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const teamMembers = [
+      { name: "Alex Johnson", role: "Founder & CEO", image: "/placeholder.svg" },
+      { name: "Sarah Lee", role: "Head of Operations", image: "/placeholder.svg" },
+      { name: "Mike Chen", role: "Lead Travel Consultant", image: "/placeholder.svg" },
+      { name: "Emma Rodriguez", role: "Customer Experience Manager", image: "/placeholder.svg" },
+    ];
+
+       // Fetch images
+       useEffect(() => {
+        const fetchImages = async () => {
+        try {
+            const response = await fetch(`${config.API}/api/uvodni-obrazkies?populate=*`);
+            const data = await response.json();
+            const fetchedImages = data.data.length > 0 ? data.data[0].Obrazky : [];
+            setImages(fetchedImages);
+        } catch (error) {
+            console.error('Error fetching images:', error);
+            setError(true);
+        } finally {
+            setLoading(false); // Set loading to false after fetch
+        }
+        };
+
+        fetchImages();
     }, []);
-  
+
+  if (loading) return <div>{console.log('Loading...')}</div>; 
+  if (error) return <div>Error: {error.message}</div>;
+
     return (
-      <div className="flex flex-col bg-gray-100 min-h-screen">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-red-600 to-red-800 text-white pb-6">
-          <div className="container mx-auto px-4 py-8">
-            <h1 className="text-4xl font-bold text-center">O nás</h1>
-            <p className="text-xl text-center mt-2">Теstovací Cestovní kancelář Vysoké školy polytechnické Jihlava</p>
-          </div>
-        </div>
+      <div className="container mx-auto px-4 py-8 space-y-12">
+        <header className="text-center space-y-4">
+          <h1 className="text-4xl font-bold tracking-tight">Cestování. Dovolená. Dobrodružství.</h1>
+          <p className="text-xl text-gray-600">Test cesťák ze 2 dny hotový</p>
+        </header>
   
-        {/* Main Content */}
-        <main className="container mx-auto px-4 py-8">
-          {/* Company Overview */}
-          <section className="bg-white shadow-md rounded-lg p-6 mb-8">
-            <h2 className="text-3xl font-semibold mb-4 text-red-800">Cestování. Dovolená. Dobrodružství.</h2>
-            <p className="text-lg mb-4">
+        <section className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="space-y-4">
+            <h2 className="text-3xl font-semibold">O nás</h2>
+            <p className="text-gray-600">
               Vysoká škola polytechnická Jihlava je od 7. 3. 2008 vlastníkem koncese na provozování cestovní kanceláře.
               Kancelář při VŠPJ byla zřízena za účelem vytvoření prostředí pro získání praktických zkušeností našich studentů v oboru a organizace zájezdů studentů oboru Cestovní ruch.
             </p>
-            {/* ... (keep the rest of the overview text) */}
-          </section>
-  
-          {/* Our Team Section */}
-          <section className="mb-12">
-            <h2 className="text-3xl font-semibold mb-6 text-red-800">Náš tým</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {team.map((member, index) => (
-                <Card key={index}>
-                  <CardHeader>
-                    <div className="flex flex-row items-center gap-4">
-                      <Avatar 
-                        src={member.image} 
-                        alt={member.name} 
-                        fallback={member.name.split(' ').map(n => n[0]).join('')}
-                      />
-                      <div>
-                        <CardTitle>{member.name}</CardTitle>
-                        <p className="text-sm text-gray-600">{member.title}</p>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm">{member.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
+            <p className="text-gray-600">
+              Kromě vícedenních pobytů nabízí CK VŠPJ i jednodenní poznávací zájezdy po přírodních i kulturních památkách ČR a okolních států. 
+              Takto naši klienti navštívili např. památky UNESCO na Vysočině, v Jižních Čechách a Olomouci. 
+              Nelze opomenout ani návštěvy Vídně a Drážďan.
+            </p>
+          </div>
+          <div className="flex justify-center">
+            <img
+              src={`${config.API}${images[0].url}`}
+              alt="Travelers exploring a scenic location"
+              width={500}
+              height={400} 
+              className="rounded-lg shadow-lg"
+            />
+          </div>
+        </section>
+
+        <section className="bg-gray-100 p-8 rounded-lg">
+          <h2 className="text-3xl font-semibold mb-6 text-center">Naše cíle</h2>
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <div className="border rounded-lg p-6 text-center space-y-2 bg-white">
+              <FaThumbsUp className="w-12 h-12 mx-auto text-red-500" /> {/* Ikona pro kvalitu */}
+              <h3 className="text-xl font-semibold">Péče a kvalita</h3>
+              <p className="text-gray-600">
+                Od 4. prosince 2023 je naše cestovní kancelář držitelem certifikátu kvality 'Péče o kvalitu' pro sektor služeb cestovních kanceláří. 
+                Tento certifikát potvrzuje naši snahu o poskytování kvalitních služeb našim klientům.
+              </p>
             </div>
-          </section>
-  
-          {/* Practicants Section */}
-          <section>
-            <h2 className="text-3xl font-semibold mb-6 text-red-800">Praktikanti</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {practicants.map((practicant, index) => (
-                <Card key={index}>
-                  <CardHeader>
-                    <div className="flex flex-row items-center gap-4">
-                      <Avatar 
-                        src={practicant.image} 
-                        alt={practicant.name} 
-                        fallback={practicant.name.split(' ').map(n => n[0]).join('')}
-                      />
-                      <div>
-                        <CardTitle>{practicant.name}</CardTitle>
-                        <p className="text-sm text-gray-600">{practicant.title}</p>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm">{practicant.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
+            <div className="border rounded-lg p-6 text-center space-y-2 bg-white">
+              <FaInfoCircle className="w-12 h-12 mx-auto text-red-500" /> {/* Ikona pro informace */}
+              <h3 className="text-xl font-semibold">Informace a služby</h3>
+              <p className="text-gray-600">
+                Aktuální informace, ale i tipy na výlety či zajímavosti ze světa cestovního ruchu najdete také na našem Facebooku a Instagramu. 
+                Umožňujeme také přímé objednávky letenek, ubytování a pojištění.
+              </p>
             </div>
-          </section>
-        </main>
+            <div className="border rounded-lg p-6 text-center space-y-2 bg-white">
+              <FaHeadset className="w-12 h-12 mx-auto text-red-500" /> {/* Ikona pro podporu */}
+              <h3 className="text-xl font-semibold">Podpora</h3>
+              <p className="text-gray-600">
+                Provozujeme také průvodcovskou činnost - možnost objednání průvodce po Jihlavě nebo průvodce po ČR či zahraničí, a to v ČJ nebo AJ.
+              </p>
+            </div>
+          </div>
+        </section>
+
+  
+        <section>
+          <h2 className="text-3xl font-semibold mb-6 text-center">Náš tým</h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {teamMembers.map((member) => (
+              <div key={member.name} className="border rounded-lg text-center p-6 space-y-2">
+                <img
+                  src={`${config.API}${images[0].url}`}
+                  alt={member.name}
+                  width={150}
+                  height={150}
+                  className="rounded-full mx-auto"
+                />
+                <h3 className="font-semibold">{member.name}</h3>
+                <p className="text-sm text-gray-600">{member.role}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+  
+        <section className="bg-red-500 text-white p-8 rounded-lg text-center space-y-4">
+          <h2 className="text-3xl font-semibold">Připraven na cestování?</h2>
+          <p className="text-xl">Společně tvoříme nezapomenutelné vzpomínky</p>
+          <button className="bg-gray-800 text-white px-4 py-2 rounded-lg mt-4 flex items-center justify-center">
+            <FaPhone className="mr-2 h-4 w-4" />
+            <Link to="/kontakty" className="block md:inline-block mt-4 md:mt-0 mr-4 md:mr-0 hover:text-accent" prefetch={false}>
+            Kontakty
+          </Link>
+          </button>
+        </section>
       </div>
     );
-  };
-  
+  }
+
   export default About;

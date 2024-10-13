@@ -87,8 +87,8 @@ const DestinationDetail = () => {
         }));
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault(); 
+    const handleSubmit = async (e) => { //TODO Opravit tuhle zkurvenou sračku, nesnáším relace ve strapi
+        e.preventDefault();  
 
        // Create a new Termin object without the id
         const { id, ...selectedTerminWithoutId } = formData.Termin;
