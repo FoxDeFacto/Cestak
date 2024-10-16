@@ -1,20 +1,14 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useLocation, Link, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import config from '../config.json';
 
 const Destinations = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const [zajezdy, setZajezdy] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [searchParams, setSearchParams] = useState({
-        'filters[Stat][$eq]': '',  
-        'filters[Od][$gte]': '',
-        'filters[Do][$lte]': '',
-        'filters[Doprava][$eq]': '',
-        'filters[Nazev][$contains]': ''
-    });
-
+    const [searchParams, setSearchParams] = useState(null);
     const [inputValues, setInputValues] = useState({
         'filters[Stat][$eq]': '',
         'filters[Od][$gte]': '',
@@ -22,7 +16,6 @@ const Destinations = () => {
         'filters[Doprava][$eq]': '',
         'filters[Nazev][$contains]': ''
     });
-    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -48,18 +41,24 @@ const Destinations = () => {
         { id: "Autobusem", name: "Autobusem" }
     ];
 
+
     useEffect(() => {
         const params = new URLSearchParams(location.search);
-        setSearchParams({
+        const newSearchParams = {
             'filters[Stat][$eq]': params.get('filters[Stat][$eq]') || '',
             'filters[Od][$gte]': params.get('filters[Od][$gte]') || '',
             'filters[Do][$lte]': params.get('filters[Do][$lte]') || '',
             'filters[Doprava][$eq]': params.get('filters[Doprava][$eq]') || '',
             'filters[Nazev][$contains]': params.get('filters[Nazev][$contains]') || ''
-        });
+        };
+        setSearchParams(newSearchParams);
+        setInputValues(newSearchParams);
+        setCurrentPage(1);
     }, [location.search]);
 
     const fetchZajezdy = useCallback(async () => {
+        if (searchParams === null) return; // Don't fetch if searchParams is not set yet
+
         let queryParams = new URLSearchParams({
             'populate[0]': 'Obrazky',
             'pagination[page]': currentPage.toString(),
@@ -76,6 +75,7 @@ const Destinations = () => {
         console.log('API Call URL:', url);
 
         try {
+            setLoading(true);
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -87,15 +87,16 @@ const Destinations = () => {
             console.error('Error fetching zajezdy:', error);
             setZajezdy([]);
             setError(error); 
-            setLoading(false);
         } finally {
             setLoading(false);
         }
     }, [searchParams, currentPage]);
 
     useEffect(() => {
-        fetchZajezdy();
-    }, [fetchZajezdy]);
+        if (searchParams !== null) {
+            fetchZajezdy();
+        }
+    }, [fetchZajezdy, searchParams]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -109,28 +110,24 @@ const Destinations = () => {
         e.preventDefault(); 
         setSearchParams(inputValues); 
         setCurrentPage(1); 
-        fetchZajezdy(); 
+        const queryString = new URLSearchParams(inputValues).toString();
+        navigate(`/zajezdy?${queryString}`);
     };
 
     const handleReset = () => {
-        setInputValues({
+        const emptyParams = {
             'filters[Stat][$eq]': '',
             'filters[Od][$gte]': '',
             'filters[Do][$lte]': '',
             'filters[Doprava][$eq]': '',
             'filters[Nazev][$contains]': ''
-        });
-        setSearchParams({
-            'filters[Stat][$eq]': '',
-            'filters[Od][$gte]': '',
-            'filters[Do][$lte]': '',
-            'filters[Doprava][$eq]': '',
-            'filters[Nazev][$contains]': ''
-        });
+        };
+        setInputValues(emptyParams);
+        setSearchParams(emptyParams);
         navigate("/zajezdy");
     };
 
-    if (loading) return <div>{console.log('Loading...')}</div>;
+    if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
 
     return (
