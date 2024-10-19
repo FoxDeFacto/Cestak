@@ -3,14 +3,24 @@
 
 Test Cesťák je webová aplikace určená pro správu a prezentaci zájezdů. Frontend je postaven pomocí React JS, zatímco backend je poháněn Strapi 5. 
 Aplikace umožňuje správu zájezdů z administrace Strapi, tam je možné nahrávat různé typy obsahu, jako texty, obrázky a dokumenty.
+Testovací verze je zprovozněna [zde](https://trvalotodvadny.jktech.dev) 
 
 
 ## Obsah
-- [Funkce](#funkce)
-- [Struktura projektu](#struktura-projektu)
-- [Technologický stack](#technologický-stack)
-- [Instalace](#instalace)
-- [Spuštění projektu](#spuštění-projektu)
+- [Test Cesťák](#test-cesťák)
+  - [Obsah](#obsah)
+  - [Funkce](#funkce)
+  - [Struktura projektu](#struktura-projektu)
+    - [Backend (Strapi)](#backend-strapi)
+    - [Frontend (React JS)](#frontend-react-js)
+  - [Technologický stack](#technologický-stack)
+  - [Instalace](#instalace)
+    - [Předpoklady](#předpoklady)
+    - [Instalace backendu (Strapi)](#instalace-backendu-strapi)
+    - [Instalace frontend (React)](#instalace-frontend-react)
+  - [Spuštění projektu](#spuštění-projektu)
+    - [Backend](#backend)
+    - [Frontend](#frontend)
 
 ## Funkce
 - **Správa zájezdů**: Administrace může přidávat nové zájezdy a aktualizovat dynamické části webu.
